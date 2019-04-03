@@ -1,12 +1,92 @@
 ﻿<!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
     <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
     <title>Welcome</title>
 </head>
-<body>
- <script>
-     location.href = "index.php";
- </script>
+<style>
+    rect {
+        fill: none;
+        pointer-events: all;
+    }
+
+    circle {
+        fill: none;
+        stroke-width: 3.5px;
+    }
+</style>
+<body background="./imgs/us.jpg" onselectstart="return false;">
+    <div style="left:5%; top:5%; position:absolute; z-index:100">
+        <p style="position:absolute">
+            <img id="img1" src="./imgs/hahaha.gif"/>
+        </p>
+    </div>
+    <script>
+        var width= document.documentElement.clientWidth*0.98;
+        var height= document.documentElement.clientHeight*0.98;
+    //    setInterval("viewcheck();", 100);  //每隔100ms调整画布大小
+        var i= 0;  //hsl变化初始值
+        var img1= document.getElementById("img1");
+        var imgratio= img1.width / img1.height;
+        if(width > height){
+            img1.width = width * 0.17;
+            img1.height = img1.width / imgratio;
+        }
+        else{
+            img1.height = height * 0.17;
+            img1.width = img1.height * imgratio;
+        }
+        var svg= d3.select("body")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .style("position", "absolute")
+                    .style("z-index", 10);
+        svg.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .on("click", drawcircle);
+
+        window.onresize = function(){  //窗口大小改变监听器
+            width= document.documentElement.clientWidth*0.98;
+            height= document.documentElement.clientHeight*0.98;
+            if(width > height){
+                img1.width = width * 0.17;
+                img1.height = img1.width / imgratio;
+            }
+            else{
+                img1.height = height * 0.17;
+                img1.width = img1.height * imgratio;
+            }
+            d3.select("svg")
+                .attr("width", width)
+                .attr("height", height);
+            d3.select("rect")
+                .attr("width", width)
+                .attr("height", height);
+        }
+
+        function drawcircle(){
+            var mouse= d3.mouse(this);
+            var maxr= height*0.25;
+            svg.insert("circle", "rect")
+                .attr("cx", mouse[0])
+                .attr("cy", mouse[1])
+                .attr("r", 1e-6)
+                .style("stroke", d3.hsl((i=(i+15)%360), 1, .5))
+                .style("stroke-opacity", 1)
+              .transition()
+                .duration(2000)
+                .ease(Math.sqrt)
+                .attr("r", maxr)
+                .style("stroke-opacity", 1e-6)
+                .remove();
+
+            d3.event.preventDefault();
+        }
+
+    </script>
+
 </body>
 </html>

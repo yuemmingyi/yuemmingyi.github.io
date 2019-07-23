@@ -6,6 +6,10 @@
     <title>Welcome</title>
 </head>
 <style>
+    body {
+        background-image: url("./imgs/us.jpg");
+    }
+
     rect {
         fill: none;
         pointer-events: all;
@@ -13,18 +17,20 @@
 
     circle {
         fill: none;
-        stroke-width: 3.5px;
+        stroke-width: 4px;
     }
 </style>
-<body background="./imgs/us.jpg" onselectstart="return false;">
+<body>
     <div style="left:5%; top:5%; position:absolute; z-index:100">
-        <p style="position:absolute">
-            <img id="img1" src="./imgs/hahaha.gif"/>
-        </p>
+        <div style="position:absolute">
+            <img id="img1" src="./imgs/hahaha.gif" onclick="change_mode()"/>
+        </div>
     </div>
     <script>
         var width= document.documentElement.clientWidth*0.98;
         var height= document.documentElement.clientHeight*0.98;
+        var modes = [Math.sqrt, Math.random];
+        var mode = 0;
     //    setInterval("viewcheck();", 100);  //每隔100ms调整画布大小
         var i= 0;  //hsl变化初始值
         var img1= document.getElementById("img1");
@@ -78,12 +84,16 @@
                 .style("stroke-opacity", 1)
               .transition()
                 .duration(2000)
-                .ease(Math.random)
+                .ease(modes[mode])
                 .attr("r", maxr)
                 .style("stroke-opacity", 1e-6)
                 .remove();
 
             d3.event.preventDefault();
+        }
+
+        function change_mode() {
+            mode = Math.abs(mode-1);
         }
 
     </script>
